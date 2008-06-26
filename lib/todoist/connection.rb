@@ -57,7 +57,7 @@ module Todoist
       # next, make our request
       response = make_api_request(request)
 
-      return JSON.parse(reponse)
+      return JSON.parse(response)
     end
 
     protected
@@ -94,7 +94,7 @@ module Todoist
       response = http.request(new_request)
 
       if response.code == '200'
-        return JSON.parse(response.body)
+        return response.body
       else
         if response.code == '404'
           raise InvalidAPICall
