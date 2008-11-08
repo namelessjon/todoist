@@ -1,0 +1,12 @@
+todoist
+=======
+
+The todoist gem is intended to facilitate access to the todoist (http://todoist.com)
+task management service, offering methods to directly query the API and also
+convinient wrapper objects around the responses.  There is also a method of
+constructing todoist URLs.
+
+COPYRIGHT
+=========
+
+Copyright (c) 2008 Jonathan Stott. See LICENSE for details.
