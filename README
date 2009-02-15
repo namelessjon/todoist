@@ -3,8 +3,18 @@ todoist
 
 The todoist gem is intended to facilitate access to the todoist (http://todoist.com)
 task management service, offering methods to directly query the API and also
-convinient wrapper objects around the responses.  There is also a method of
-constructing todoist URLs.
+convinient wrapper objects around the responses.
+
+
+example
+-------
+
+
+Todoist::Base.setup(api_token)
+
+Todoist::Task.all.each do |task|
+  puts task
+end
 
 COPYRIGHT
 =========
