@@ -1,0 +1,90 @@
+require 'thor'
+require 'highline'
+
+HighLine.track_eof = false
+
+dir = File.dirname(__FILE__)
+require File.join(dir, '..', 'lib', 'todoist')
+
+class TodoistCLI < Thor
+
+  desc "tasks", "list of projects with uncompleted tasks, and their tasks"
+  def tasks(name=nil)
+    setup_todoist_base
+
+    Todoist::Project.all.each do |project|
+      next if name and project.name !~ /#{name}/
+
+      if project.task_count > 0
+        print_project(project)
+      end
+    end
+  end
+
+  desc "complete", "Completes the task with the given content"
+  method_options :all => :boolean
+  def complete(content)
+    setup_todoist_base
+
+    @h = HighLine.new
+
+    to_complete = []
+    Todoist::Task.all.each do |task|
+      next if task.content !~ /#{content}/
+      to_complete << task
+    end
+
+    tasks = []
+    if to_complete.size > 1 and !options[:all]
+      @h.say("Choose tasks to delete:")
+      to_complete.each do |task|
+        if @h.agree("Delete #{task} (#{task.project})?")
+          tasks << task
+        end
+      end
+    else
+      tasks = to_complete
+    end
+
+    Todoist::Task.complete(tasks)
+  end
+
+  desc "overdue", "Fetch all overdue tasks"
+  def overdue
+    setup_todoist_base
+    Todoist::Task.overdue.each do |task|
+      puts task
+    end
+  end
+
+  protected
+  def print_project(project)
+    puts project
+    project.tasks.each do |task|
+      print "  " * (task.indent.to_i - 1)
+      print (task.content =~ /\* /) ? '' : '- '
+      puts task
+    end
+    puts ""
+  end
+
+  def setup_todoist_base
+    if File.file?(File.expand_path('~/.todoistrc'))
+      require 'yaml'
+      conf = YAML.load_file(File.expand_path('~/.todoistrc'))
+      Todoist::Base.setup(conf['token'], conf['premium'])
+    else
+      puts <<-eos
+You need to setup ~/.todoistrc, for example:
+token: 91b1ce9e153fc5390ac3db4f0ded9f31a1a7ba23 # use your api key
+premium: false # if this is true, ssl will be used.
+eos
+      exit(1)
+    end
+  end
+
+end
+
+TodoistCLI.start
+
+# vim: set ft=ruby:

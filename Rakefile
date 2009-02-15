@@ -10,8 +10,12 @@ begin
     s.summary = "a library for interacting with the Todoist public API"
     s.email = "jonathan.stott@gmail.com"
     s.homepage = "http://github.com/namelessjon/todoist"
-    s.description = "The todoist gem offers convinience methods and wrappers for the todoist list management service, easing retrival and parsing of the responses.\n\nIt has two main parts: The central library for making the requests and deserializing the results, and a series of objects to wrap the responses in.\n\nThere is also a URL generator, for those who want to integrate the todoist service in other ways."
+    s.description = "The todoist gem offers convinience methods and wrappers for the todoist list management service, easing retrival and parsing of the responses.  It also offers a simple command-line client."
     s.authors = ["Jonathan Stott"]
+    s.files   = FileList["lib/**/*.rb", "spec/**/*.rb", 'Rakefile', "[A-Z]+"]
+    s.add_dependency('highline', '~> 1.5')
+    s.add_dependency('thor', '~> 0.9')
+    s.add_dependency('httparty', '~> 0.3')
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
