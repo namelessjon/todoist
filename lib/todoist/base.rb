@@ -11,6 +11,16 @@ module Todoist
     ##
     # Sets up the Todoist::Base class for making requests, setting the API key
     # and if the account is a premium one or not.
+    def self.login(email, password)
+      self.get('/login', {email: email, password: password})
+      self.default_params :token => token
+      @@premium = premium
+      set_base_uri
+    end
+
+    ##
+    # Sets up the Todoist::Base class for making requests, setting the API key
+    # and if the account is a premium one or not.
     def self.setup(token, premium = false)
       self.default_params :token => token
       @@premium = premium
