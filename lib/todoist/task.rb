@@ -202,7 +202,15 @@ module Todoist
       self
     end
 
+    def add_note(content)
+      query = {item_id: id, content: content}
+      Todoist::Base.post('/addNote', :query => query)
+    end
 
+    def notes
+      response = Base.get('/getNotes', :query => {item_id: id})
+      response.map { |n| Todoist::Note.new(n) }
+    end
 
     def to_s
       @content
