@@ -18,8 +18,7 @@ module Todoist
       if response.body == "\"LOGIN_ERROR\""
         raise AuthenticationError, "Wrong passowrd of email. You entered #{email} as email."
       else
-        body = JSON.parse(response.body)
-        self.setup(body['token'], body['is_premium'])
+        self.setup(response['token'], response['is_premium'])
       end
     end
 
