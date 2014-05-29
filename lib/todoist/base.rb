@@ -5,17 +5,22 @@ module Todoist
   # The Todoist::Base class is responsible for making all queries to the
   # todoist web API.
   class Base
+    class AuthenticationError < StandardError; end 
+
     include HTTParty
     format :json
 
     ##
-    # Sets up the Todoist::Base class for making requests, setting the API key
-    # and if the account is a premium one or not.
+    # Get authentication token using user email and password, 
+    # set up this token for making requests (see #setup method)
     def self.login(email, password)
-      self.get('/login', {email: email, password: password})
-      self.default_params :token => token
-      @@premium = premium
-      set_base_uri
+      response = HTTParty.post('http://todoist.com/API/login', {body: {email: email, password: password}})
+      if response.body == "\"LOGIN_ERROR\""
+        raise AuthenticationError, "Wrong passowrd of email. You entered #{email} as email."
+      else
+        body = JSON.parse(response.body)
+        self.setup(body['token'], body['is_premium'])
+      end
     end
 
     ##
