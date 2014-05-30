@@ -209,7 +209,7 @@ module Todoist
 
     def notes
       response = Base.get('/getNotes', :query => {item_id: id})
-      response.map { |n| Todoist::Note.new(n) }
+      response.map { |n| Todoist::Note.new(n.merge!('task' => self)) }
     end
 
     def to_s

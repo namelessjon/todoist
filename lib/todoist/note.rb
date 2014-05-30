@@ -4,12 +4,15 @@ module Todoist
   #
   # A todoist task.
   class Note
-    attr_accessor :is_deleted, :is_archived, :content, :posted_uid, 
-                  :item_id, :uids_to_notify, :id, :posted
-    
-    def initialize(hash)
-      hash.each_pair do |key, value|
-        self.send :"#{key}=", value
+
+    ATTRIBUTES = [:is_deleted, :is_archived, :content, :posted_uid, 
+                  :item_id, :uids_to_notify, :id, :posted, :task]
+
+    attr_accessor *ATTRIBUTES
+
+    def initialize(hash = {})
+      ATTRIBUTES.each do |attribute|
+        self.public_send("#{attribute}=", hash.fetch(attribute.to_s))
       end
     end
 
@@ -19,10 +22,6 @@ module Todoist
 
     def archived?
       self.is_archived == 0
-    end
-
-    def task
-      Todoist::Task.get(self.item_id).first
     end
 
   end
