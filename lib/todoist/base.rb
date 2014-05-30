@@ -14,7 +14,7 @@ module Todoist
     # Get authentication token using user email and password, 
     # set up this token for making requests (see #setup method)
     def self.login(email, password)
-      response = HTTParty.post('http://todoist.com/API/login', {body: {email: email, password: password}})
+      response = HTTParty.post('https://todoist.com/API/login', {body: {email: email, password: password}})
       if response.body == "\"LOGIN_ERROR\""
         raise AuthenticationError, "Wrong passowrd of email. You entered #{email} as email."
       else
