@@ -1,8 +1,8 @@
 module Todoist
   ##
-  # Todoist Task
+  # Todoist Note
   #
-  # A todoist task.
+  # A todoist note (comment of a todo item).
   class Note
 
     ATTRIBUTES = [:is_deleted, :is_archived, :content, :posted_uid, 
