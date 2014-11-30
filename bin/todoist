@@ -13,11 +13,8 @@ class TodoistCLI < Thor
     setup_todoist_base
 
     Todoist::Project.all.each do |project|
-      next if name and project.name !~ /#{name}/
-
-      if project.task_count > 0
-        print_project(project)
-      end
+      next unless (name and project.name =~ /#{name}/) || project.tasks.count > 0
+      print_project(project)
     end
   end
 
