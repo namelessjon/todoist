@@ -49,7 +49,6 @@ module Todoist
       @color      = parameters['color']
       @collapsed  = parameters['collapsed']
       @order      = parameters['item_order']
-      @count      = parameters['cache_count']
       @indent     = parameters['indent']
     end
 
@@ -74,11 +73,12 @@ module Todoist
     ##
     # The task count
     #
-    # The number of tasks a project has, according to its cache_count when it was fetched
+    # The number of tasks a project has
     #
     # @return [Integer] The number of tasks this project has
     def task_count
-      @count
+      @all_tasks ||= Task.all(self)
+      @all_tasks.size
     end
 
     ##
@@ -86,7 +86,7 @@ module Todoist
     #
     # @return [Array] An Array of Todoist::Tasks
     def tasks
-      Task.uncompleted(self)
+      @uncompleted_tasks ||= Task.uncompleted(self)
     end
 
     ##
@@ -94,7 +94,7 @@ module Todoist
     #
     # @return [Array] An Array of completed Todoist::Tasks
     def completed_tasks
-      Task.completed(self)
+      @completed_tasks ||= Task.completed(self)
     end
 
     ##
