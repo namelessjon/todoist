@@ -212,6 +212,10 @@ module Todoist
       response.map { |n| Todoist::Note.new(n.merge!('task' => self)) }
     end
 
+	def priority
+	  @priority
+	end
+
     def to_s
       @content
     end
